@@ -71,6 +71,7 @@ CREATE TABLE [dbo].[Book](
 	[PublishedDate] [datetime] NULL,
 	[Description] [varchar](1000) NULL,
 	[TotalPagePerBook] [int] NULL,
+	[BookContent] VARBINARY(Max),
 	[AvailabilityStatus] [varchar](10) NULL,
 	[CreatedDate] [datetime] NOT NULL,
 	[UploadedBy] [int] NOT NULL,
