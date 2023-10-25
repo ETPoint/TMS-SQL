@@ -76,6 +76,22 @@ GO
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Admin_Description]') AND type in (N'U'))
 ALTER TABLE [dbo].[Admin_Description] DROP CONSTRAINT IF EXISTS [df_Admin_Description_AdmintatusID]
 GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[[Refreshtoken]]') AND type in (N'U'))
+ALTER TABLE [dbo].[Refreshtoken]  DROP CONSTRAINT IF EXISTS [df_Admin_Description_AdmintatusID] 
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Admin]') AND type in (N'U'))
+ALTER TABLE [dbo].[Admin]  DROP  CONSTRAINT IF EXISTS [FK_Admin_Admin_Status_StatusID] 
+GO
+
+
+
+
+/****** Object:  Table [dbo].[Refreshtoken]    Script Date: 10/10/2023 1:51:33 PM ******/
+DROP TABLE IF EXISTS [dbo].[Refreshtoken]
+GO
+/****** Object:  Table [dbo].[Admin_Status]  Script Date: 10/10/2023 1:51:33 PM ******/
+DROP TABLE IF EXISTS [dbo].[Admin_Status]
+GO
 /****** Object:  Table [dbo].[User]    Script Date: 10/10/2023 1:51:33 PM ******/
 DROP TABLE IF EXISTS [dbo].[User]
 GO
@@ -118,3 +134,4 @@ GO
 /****** Object:  Table [dbo].[Admin]    Script Date: 10/10/2023 1:51:33 PM ******/
 DROP TABLE IF EXISTS [dbo].[Admin]
 GO
+
