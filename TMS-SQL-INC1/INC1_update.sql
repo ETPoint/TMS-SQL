@@ -22,11 +22,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
-CREATE TABLE [dbo].[Admin_Description](
+CREATE TABLE [dbo].[Admins_Description](
 	[AdminID] [tinyint] NOT NULL,
-	[AdmintatusID] [bit] NULL,
-	[AdminDescription] [varchar](15) NULL,
-	[Admintatus] [varchar](10) NULL,
+	[AdminStatusID] [bit] NULL,
+	[AdminDescription] [varchar](15) NULL
+	--,[AdminStatus] [varchar](10) NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[AdminID] ASC
@@ -35,26 +35,39 @@ PRIMARY KEY CLUSTERED
 GO
 SET ANSI_PADDING OFF
 GO
-/****** Object:  Table [dbo].[Admins_Description]    Script Date: 10/10/2023 1:51:33 PM ******/
+
+/****** Object:  Table [dbo].[Admin_Status]    Script Date: 10/10/2023 1:51:33 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
 GO
-CREATE TABLE [dbo].[Admins_Description](
-	[AdminID] [tinyint] NOT NULL,
-	[AdminStatusID] [bit] NULL,
-	[AdminDescription] [varchar](15) NULL,
+CREATE TABLE [dbo].[Admin_Status](
+	[StatusID] [tinyint] NOT NULL,
 	[AdminStatus] [varchar](10) NULL,
 PRIMARY KEY CLUSTERED 
 (
-	[AdminID] ASC
+	StatusID ASC
 )WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 SET ANSI_PADDING OFF
 GO
+
+insert into Admins_Description (AdminID,AdminDescription) values (0,'Non Admin')
+go
+insert into Admins_Description (AdminID,AdminDescription) values (1,'Club Admin')
+go
+insert into Admins_Description (AdminID,AdminDescription) values (2,'Super Admin')
+go
+
+
+insert into [dbo].[Admin_Status]   values (1,'Active')
+go
+insert into [dbo].[Admin_Status]   values (0,'Inactive')
+go
+
 /****** Object:  Table [dbo].[Book]    Script Date: 10/10/2023 1:51:33 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -272,6 +285,8 @@ CREATE TABLE [dbo].[User](
 	[Email] [varchar](25) NULL,
 	[Phone] [varchar](15) NULL,
 	[MembershipStartDate] [datetime] NULL,
+	[username]  varchar(25) not null,
+	[password] varchar(max),
 	[MembershipStatus] [varchar](10) NULL,
 PRIMARY KEY CLUSTERED 
 (
@@ -281,8 +296,38 @@ PRIMARY KEY CLUSTERED
 GO
 SET ANSI_PADDING OFF
 GO
-ALTER TABLE [dbo].[Admin_Description] ADD  CONSTRAINT [df_Admin_Description_AdmintatusID]  DEFAULT ((1)) FOR [AdmintatusID]
+
+INSERT INTO [user] (firstname,lastname,email, [password],username) values ('Mike', 'Tefera','wongelmikre@gmail.com', 'P@ssw0rd!','mikre')
 GO
+
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[tbl_refreshtoken]    Script Date: 23-07-22 08:32:10 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[Refreshtoken](
+	[UserID] [int] IDENTITY(1,1) NOT NULL,
+	[TokenId] [varchar](50) NULL,
+	[RefreshToken] [nvarchar](max) NULL,
+	[IsActive] [bit] NULL,
+ CONSTRAINT [PK_tbl_refreshtoken] PRIMARY KEY CLUSTERED 
+(
+	[UserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE  [dbo].[Refreshtoken] ADD  CONSTRAINT [df_Refreshtoken_IsActive]  DEFAULT 1 FOR [IsActive]
+GO
+--ALTER TABLE [dbo].[Admin_Description] ADD  CONSTRAINT [df_Admin_Description_AdmintatusID]  DEFAULT ((1)) FOR [AdmintatusID]
+--GO
 ALTER TABLE [dbo].[Book] ADD  CONSTRAINT [df_Book_AvailabilityStatus]  DEFAULT ('Available') FOR [AvailabilityStatus]
 GO
 ALTER TABLE [dbo].[Book] ADD  CONSTRAINT [df_Book_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
@@ -301,11 +346,20 @@ ALTER TABLE [dbo].[Plan_review] ADD  CONSTRAINT [df_Plan_review_Review_Date]  DE
 GO
 ALTER TABLE [dbo].[User] ADD  CONSTRAINT [df_User_MembershipStartDate]  DEFAULT (getdate()) FOR [MembershipStartDate]
 GO
-ALTER TABLE [dbo].[Admin]  WITH CHECK ADD  CONSTRAINT [FK_Admin_Admin_Description_AdminID] FOREIGN KEY([AdminID])
-REFERENCES [dbo].[Admin_Description] ([AdminID])
+ALTER TABLE  [dbo].[admin_Status] ADD  CONSTRAINT [df_StatusID_AdminStatus]  DEFAULT 1 FOR [AdminStatus]
 GO
-ALTER TABLE [dbo].[Admin] CHECK CONSTRAINT [FK_Admin_Admin_Description_AdminID]
+ALTER TABLE [dbo].[Refreshtoken]  WITH CHECK ADD  CONSTRAINT [FK_User_Refreshtoken_UserId] FOREIGN KEY([UserId])
+REFERENCES [dbo].[User] ([UserId])
 GO
+--ALTER TABLE [dbo].[Admin]  WITH CHECK ADD  CONSTRAINT [FK_Admin_Admin_Description_AdminID] FOREIGN KEY([AdminID])
+--REFERENCES [dbo].[Admin_Description] ([AdminID])
+--GO
+ALTER TABLE [dbo].[Admin_Status]  WITH CHECK ADD  CONSTRAINT [FK_Admin_Admin_Status_StatusID] FOREIGN KEY([StatusID])
+REFERENCES [dbo].Admins_Description  (AdminID)
+GO
+
+
+
 ALTER TABLE [dbo].[Admin]  WITH CHECK ADD  CONSTRAINT [FK_Admin_User_UserID] FOREIGN KEY([UserID])
 REFERENCES [dbo].[User] ([UserID])
 GO
