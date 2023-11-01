@@ -34,6 +34,10 @@ GO
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Club]') AND type in (N'U'))
 ALTER TABLE [dbo].[Club] DROP CONSTRAINT IF EXISTS [FK_Club_User_UserID]
 GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Club]') AND type in (N'U'))
+ALTER TABLE [dbo].[Club] DROP  CONSTRAINT IF EXISTS [df_Club_AdminID]   
+GO
+
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Book]') AND type in (N'U'))
 ALTER TABLE [dbo].[Book] DROP CONSTRAINT IF EXISTS [FK_Book_User_UploadedBy]
 GO
@@ -48,6 +52,9 @@ ALTER TABLE [dbo].[Admin] DROP CONSTRAINT IF EXISTS [FK_Admin_Admin_Description_
 GO
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[User]') AND type in (N'U'))
 ALTER TABLE [dbo].[User] DROP CONSTRAINT IF EXISTS [df_User_MembershipStartDate]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[User]') AND type in (N'U'))
+ALTER TABLE [dbo].[User] DROP  CONSTRAINT  IF EXISTS [df_User_AdminID]   
 GO
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Plan_review]') AND type in (N'U'))
 ALTER TABLE [dbo].[Plan_review] DROP CONSTRAINT IF EXISTS [df_Plan_review_Review_Date]
@@ -75,6 +82,22 @@ ALTER TABLE [dbo].[Book] DROP CONSTRAINT IF EXISTS [df_Book_AvailabilityStatus]
 GO
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Admin_Description]') AND type in (N'U'))
 ALTER TABLE [dbo].[Admin_Description] DROP CONSTRAINT IF EXISTS [df_Admin_Description_AdmintatusID]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[[Refreshtokens]]') AND type in (N'U'))
+ALTER TABLE [dbo].[Refreshtokens]  DROP CONSTRAINT IF EXISTS [df_Admin_Description_AdmintatusID] 
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Admin]') AND type in (N'U'))
+ALTER TABLE [dbo].[Admin]  DROP  CONSTRAINT IF EXISTS [FK_Admin_Admin_Status_StatusID] 
+GO
+
+
+
+
+/****** Object:  Table [dbo].[Refreshtokens]    Script Date: 10/10/2023 1:51:33 PM ******/
+DROP TABLE IF EXISTS [dbo].[Refreshtokens]
+GO
+/****** Object:  Table [dbo].[Admin_Status]  Script Date: 10/10/2023 1:51:33 PM ******/
+DROP TABLE IF EXISTS [dbo].[Admin_Status]
 GO
 /****** Object:  Table [dbo].[User]    Script Date: 10/10/2023 1:51:33 PM ******/
 DROP TABLE IF EXISTS [dbo].[User]
@@ -118,3 +141,4 @@ GO
 /****** Object:  Table [dbo].[Admin]    Script Date: 10/10/2023 1:51:33 PM ******/
 DROP TABLE IF EXISTS [dbo].[Admin]
 GO
+
